@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>صانع الرجال | كُن الأَفْضَل</title>
+  <style>
+    :root {
+      --navy: #242F49;
+      --slate: #384358;
+      --peach: #FFA586;
+      --maroon: #541A2E;
+      --light-bg: #F6F7FA;
+      --light-card: #FFFFFF;
+      --light-input: #EEF1F6;
+      --light-border: #D5DCE8;
+      --text-dark: #1E2533;
+      --text-muted: #5A657A;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--navy);
+      color: #FFFFFF;
+      min-height: 100vh;
+      line-height: 1.65;
+    }
+
+    body.auth-mode {
+      background-color: var(--light-bg);
+      color: var(--text-dark);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* شاشة الدخول والتسجيل الفاتحة والخالية من الأحمر */
+    .auth-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: linear-gradient(180deg, #F8F9FC 0%, #ECEFF5 100%);
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 450px;
+      background: var(--light-card);
+      border: 1px solid var(--light-border);
+      border-radius: 18px;
+      padding: 28px 24px;
+      box-shadow: 0 12px 30px rgba(36, 47, 73, 0.08);
+    }
+
+    .brand-header-auth {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .brand-title-auth {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .auth-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin-bottom: 18px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+    }
+
+    .input-control, select.input-control, textarea.input-control {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--light-border);
+      background-color: var(--light-input);
+      color: var(--text-dark);
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .input-control:focus, select.input-control:focus, textarea.input-control:focus {
+      border-color: var(--navy);
+      background-color: #FFFFFF;
+    }
+
+    .password-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-box .input-control {
+      padding-left: 44px;
+    }
+
+    .eye-toggle {
+      position: absolute;
+      left: 10px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 4px 6px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn-primary-light {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background-color: var(--navy);
+      color: #FFFFFF;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    .btn-primary-light:hover {
+      background-color: var(--slate);
+    }
+
+    .auth-switch {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .auth-switch button {
+      background: none;
+      border: none;
+      color: var(--navy);
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: underline;
+      margin: 0 4px;
+    }
+
+    .notice-box {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background-color: #EEF2F8;
+      color: var(--navy);
+      font-size: 0.86rem;
+      border: 1px solid var(--light-border);
+    }
+
+    /* شريط التنقل العلوي */
+    .topbar {
+      background-color: var(--slate);
+      border-bottom: 1px solid rgba(255, 165, 134, 0.25);
+      padding: 12px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .brand-name {
+      font-size: 1.22rem;
+      font-weight: 800;
+      color: #FFFFFF;
+    }
+
+    .nav-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      background-color: var(--navy);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      padding: 8px 14px;
+      border-radius: 9px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .nav-btn.active, .nav-btn:hover {
+      background-color: var(--peach);
+      color: var(--navy);
+      border-color: var(--peach);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pill-badge {
+      background-color: var(--maroon);
+      color: #FFFFFF;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      color: #FFFFFF;
+      padding: 6px 11px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--peach);
+      color: var(--peach);
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 18px 60px;
+    }
+
+    /* بوابة الدفع / التجديد */
+    .gate-card {
+      max-width: 620px;
+      margin: 30px auto;
+      background-color: var(--slate);
+      border: 1px solid rgba(255, 165, 134, 0.35);
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28);
+    }
+
+    .gate-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--peach);
+      margin-bottom: 10px;
+    }
+
+    .wallet-box {
+      background-color: var(--navy);
+      border: 1px dashed var(--peach);
+      border-radius: 12px;
+      padding: 14px;
+      margin: 16px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .wallet-number {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--peach);
+      letter-spacing: 1px;
+    }
+
+    .btn-accent {
+      background-color: var(--peach);
+      color: var(--navy);
+      border: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 0.92rem;
+    }
+
+    .btn-accent:hover {
+      opacity: 0.92;
+    }
+
+    /* لافتة كُن الأفضل */
+    .hero-banner {
+      background: linear-gradient(125deg, var(--slate) 0%, var(--maroon) 100%);
+      border: 1px solid rgba(255, 165, 134, 0.35);
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .hero-motto {
+      font-size: 1.75rem;
+      font-weight: 900;
+      font-style: italic;
+      color: var(--peach);
+      letter-spacing: 0.5px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      background-color: var(--slate);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #D8DFEC;
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--peach);
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .panel {
+      background-color: var(--slate);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .panel-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--peach);
+    }
+
+    .item-row {
+      background-color: var(--navy);
+      border-radius: 11px;
+      padding: 11px 13px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .item-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #FFFFFF;
+    }
+
+    .item-sub {
+      font-size: 0.84rem;
+      color: #CBD4E6;
+      margin-top: 3px;
+    }
+
+    .tag-maroon {
+      background-color: var(--maroon);
+      color: #FFFFFF;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .check-btn {
+      background-color: var(--slate);
+      color: #FFFFFF;
+      border: 1px solid var(--peach);
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .check-btn.done {
+      background-color: var(--peach);
+      color: var(--navy);
+    }
+
+    .switcher-row, .day-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .day-pill {
+      background-color: var(--navy);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 7px 13px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .day-pill.active {
+      background-color: var(--maroon);
+      border-color: var(--peach);
+      color: var(--peach);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.88rem;
+    }
+
+    th, td {
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      padding: 9px 10px;
+      text-align: right;
+    }
+
+    th {
+      background-color: var(--maroon);
+      color: #FFFFFF;
+    }
+
+    td {
+      background-color: var(--navy);
+    }
+
+    /* خانة المساعدة والدعم بعد فتح الموقع وقبول الاشتراك */
+    .support-box {
+      background-color: var(--maroon);
+      border: 1px solid var(--peach);
+      border-radius: 16px;
+      padding: 18px;
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    /* النوافذ المنبثقة */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 14, 24, 0.78);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+    }
+
+    .modal-card {
+      width: 100%;
+      max-width: 700px;
+      max-height: 86vh;
+      overflow-y: auto;
+      background-color: var(--slate);
+      border: 1px solid var(--peach);
+      border-radius: 16px;
+      padding: 22px;
+    }
+
+    /* مشهد الترحيب Motion Graphics + 3D */
+    .welcome-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: radial-gradient(circle at center, #384358 0%, #242F49 68%, #171E30 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      perspective: 1200px;
+      overflow: hidden;
+    }
+
+    .welcome-grid-bg {
+      position: absolute;
+      inset: -20%;
+      background-image:
+        linear-gradient(rgba(255, 165, 134, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 165, 134, 0.08) 1px, transparent 1px);
+      background-size: 44px 44px;
+      transform: rotateX(55deg) translateY(10%);
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    .welcome-stage {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 520px;
+      width: 100%;
+      padding: 32px 24px;
+      border-radius: 24px;
+      background: rgba(36, 47, 73, 0.72);
+      border: 1px solid rgba(255, 165, 134, 0.35);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+      transform-style: preserve-3d;
+      transition: transform 0.16s ease-out;
+    }
+
+    .welcome-logo-3d {
+      display: inline-block;
+      transform: translateZ(48px);
+      animation: float3d 3s ease-in-out infinite;
+      margin-bottom: 12px;
+    }
+
+    @keyframes float3d {
+      0%, 100% { transform: translateZ(48px) translateY(0px) rotateY(-4deg); }
+      50% { transform: translateZ(62px) translateY(-7px) rotateY(4deg); }
+    }
+
+    .welcome-brand {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #FFFFFF;
+      transform: translateZ(36px);
+    }
+
+    .welcome-hero-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--peach);
+      margin-top: 6px;
+      transform: translateZ(28px);
+    }
+
+    .welcome-motto {
+      font-size: 1.45rem;
+      font-weight: 900;
+      font-style: italic;
+      color: #FFFFFF;
+      background-color: var(--maroon);
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 999px;
+      margin-top: 14px;
+      border: 1px solid var(--peach);
+      transform: translateZ(32px);
+    }
+
+    .welcome-bar-wrap {
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 22px;
+    }
+
+    .welcome-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--peach);
+      animation: barFill 3.6s linear forwards;
+    }
+
+    @keyframes barFill {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+  </style>
+</head>
+<body class="auth-mode">
+
+  <!-- مشهد الترحيب ثلاثي الأبعاد عند فتح الموقع بعد القبول -->
+  <div id="welcomeOverlay" class="welcome-overlay hidden">
+    <div class="welcome-grid-bg"></div>
+    <div id="welcomeStage" class="welcome-stage">
+      <div class="welcome-logo-3d">
+        <svg width="86" height="86" viewBox="0 0 120 120" aria-label="شعار صانع الرجال ثلاثي الأبعاد">
+          <polygon points="10,22 45,8 45,48 76,34 76,6 112,2 96,34 62,54 96,52 84,84 52,98 22,114 22,74 10,64" fill="#FFA586" stroke="#541A2E" stroke-width="4"/>
+          <polygon points="24,25 36,20 36,68 56,58 56,90 32,102 32,68 24,60" fill="#242F49"/>
+          <polygon points="62,54 94,20 98,30 72,56 88,56 78,78 56,88" fill="#541A2E"/>
+        </svg>
+      </div>
+      <div class="welcome-brand">صانع الرجال</div>
+      <div id="welcomeHeroText" class="welcome-hero-name">أهلاً بك يا البطل</div>
+      <div><span class="welcome-motto">كُن الأَفْضَل</span></div>
+      <div class="welcome-bar-wrap">
+        <div class="welcome-bar-fill"></div>
+      </div>
+      <div style="margin-top:18px;">
+        <button type="button" id="enterDashboardBtn" class="btn-accent">دخول إلى لوحة البطل</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- شاشة الدخول والتسجيل -->
+  <section id="authSection" class="auth-wrapper">
+    <div class="auth-card">
+      <div class="brand-header-auth">
+        <svg width="44" height="44" viewBox="0 0 120 120" aria-label="شعار صانع الرجال">
+          <polygon points="10,22 45,8 45,48 76,34 76,6 112,2 96,34 62,54 96,52 84,84 52,98 22,114 22,74 10,64" fill="#242F49" stroke="#541A2E" stroke-width="4"/>
+          <polygon points="24,25 36,20 36,68 56,58 56,90 32,102 32,68 24,60" fill="#FFA586"/>
+          <polygon points="62,54 94,20 98,30 72,56 88,56 78,78 56,88" fill="#541A2E"/>
+        </svg>
+        <span class="brand-title-auth">صانع الرجال</span>
+      </div>
+
+      <p id="authSubtitle" class="auth-subtitle">سجّل دخولك أو أنشئ حسابك لبدء رحلتك نحو الأفضل</p>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="loginEmail">البريد الإلكتروني</label>
+          <input type="email" id="loginEmail" class="input-control" placeholder="name@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">كلمة المرور</label>
+          <div class="password-box">
+            <input type="password" id="loginPassword" class="input-control" placeholder="••••••••" required />
+            <button type="button" class="eye-toggle" data-target="loginPassword" aria-label="إظهار كلمة المرور">👁️</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary-light">دخول</button>
+        <div class="auth-switch">
+          <span>ليس لديك حساب؟</span>
+          <button type="button" id="toSignupBtn">Sign Up</button>
+        </div>
+      </form>
+
+      <form id="signupForm" class="hidden">
+        <div class="form-group">
+          <label for="signupName">الاسم</label>
+          <input type="text" id="signupName" class="input-control" placeholder="اكتب اسمك" required />
+        </div>
+        <div class="form-group">
+          <label for="signupEmail">البريد الإلكتروني</label>
+          <input type="email" id="signupEmail" class="input-control" placeholder="name@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="signupPassword">كلمة المرور</label>
+          <div class="password-box">
+            <input type="password" id="signupPassword" class="input-control" placeholder="اختر كلمة مرور" required />
+            <button type="button" class="eye-toggle" data-target="signupPassword" aria-label="إظهار كلمة المرور">👁️</button>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="signupHeight">الطول (سم)</label>
+            <input type="number" id="signupHeight" class="input-control" min="130" max="220" placeholder="مثلاً 172" required />
+          </div>
+          <div class="form-group">
+            <label for="signupWeight">الوزن (كجم)</label>
+            <input type="number" id="signupWeight" class="input-control" min="35" max="250" step="0.5" placeholder="مثلاً 74" required />
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="signupGoal">الهدف</label>
+            <select id="signupGoal" class="input-control">
+              <option value="maintain">ثبات الوزن</option>
+              <option value="loss">خسارة الوزن والدهون</option>
+              <option value="gain">زيادة الوزن وبناء العضلات</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="signupActivity">مستوى النشاط</label>
+            <select id="signupActivity" class="input-control">
+              <option value="moderate">متوسط (3-5 أيام)</option>
+              <option value="light">خفيف (1-3 أيام)</option>
+              <option value="high">عالٍ (6-7 أيام)</option>
+              <option value="sedentary">خامل</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary-light">إنشاء الحساب</button>
+        <div class="auth-switch">
+          <span>لديك حساب بالفعل؟</span>
+          <button type="button" id="toLoginBtn">Log In</button>
+        </div>
+      </form>
+
+      <div id="authNotice" class="notice-box hidden"></div>
+    </div>
+  </section>
+
+  <!-- التطبيق الرئيسي -->
+  <div id="appShell" class="hidden">
+    <header class="topbar">
+      <div class="brand-box" id="brandHomeBtn">
+        <svg width="36" height="36" viewBox="0 0 120 120" aria-label="شعار صانع الرجال">
+          <polygon points="10,22 45,8 45,48 76,34 76,6 112,2 96,34 62,54 96,52 84,84 52,98 22,114 22,74 10,64" fill="#FFA586" stroke="#242F49" stroke-width="4"/>
+          <polygon points="24,25 36,20 36,68 56,58 56,90 32,102 32,68 24,60" fill="#242F49"/>
+          <polygon points="62,54 94,20 98,30 72,56 88,56 78,78 56,88" fill="#541A2E"/>
+        </svg>
+        <span class="brand-name">صانع الرجال</span>
+      </div>
+
+      <nav id="mainNav" class="nav-tabs">
+        <button class="nav-btn active" data-page="home">الرئيسية</button>
+        <button class="nav-btn" data-page="workouts">التدريبات</button>
+        <button class="nav-btn" data-page="nutrition">الغذاء</button>
+        <button class="nav-btn" data-page="activities">الأنشطة</button>
+      </nav>
+
+      <div class="top-actions">
+        <span id="cloudStatusBadge" class="pill-badge">وضع محلي</span>
+        <span id="subRemainingBadge" class="pill-badge">الاشتراك: -</span>
+        <button id="replayWelcomeBtn" class="btn-ghost">ترحيب 3D</button>
+        <button id="editProfileBtn" class="btn-ghost">تعديل البيانات</button>
+        <button id="openAdminBtn" class="btn-ghost">لوحة الإدارة</button>
+        <button id="logoutBtn" class="btn-ghost">خروج</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- بوابة الدفع / التجديد -->
+      <section id="paywallSection" class="gate-card hidden">
+        <div id="gateTitle" class="gate-title">تفعيل الاشتراك الشهري — 250</div>
+        <p id="gateDescription">
+          لفتح منصة <strong>صانع الرجال</strong> لمدة شهر واحد (30 يوماً)، قيمة الاشتراك <strong>250</strong>. حوّل المبلغ إلى المحفظة الإلكترونية وأرسل رقم العملية لانتظار القبول.
+        </p>
+
+        <div class="wallet-box">
+          <div>
+            <div style="font-size: 0.82rem; color: #CBD4E6;">رقم المحفظة الإلكترونية للتحويل:</div>
+            <div id="walletNumberDisplay" class="wallet-number">01273568689</div>
+          </div>
+          <button type="button" id="copyWalletBtn" class="btn-accent">نسخ الرقم</button>
+        </div>
+
+        <form id="paymentRequestForm">
+          <div class="form-group">
+            <label for="txRefInput">رقم العملية أو ملاحظة التحويل (قيمة الاشتراك: 250)</label>
+            <input type="text" id="txRefInput" class="input-control" style="background:#FFFFFF;" placeholder="اكتب رقم العملية أو تفاصيل التحويل" required />
+          </div>
+          <button type="submit" class="btn-accent" style="width:100%;">إرسال تأكيد الدفع وانتظار القبول</button>
+        </form>
+
+        <div id="pendingStatusBox" class="notice-box hidden" style="background:#242F49; color:#FFA586; border-color:#FFA586; margin-top:16px;">
+          تم إرسال طلبك بنجاح وحالته الآن: <strong>بانتظار قبولك وتفعيل الحساب</strong>. لن يُفتح الموقع حتى يتم الضغط على زر القبول.
+        </div>
+      </section>
+
+      <!-- المحتوى المفتوح بعد القبول -->
+      <div id="unlockedContent">
+        <section id="page-home">
+          <div class="hero-banner">
+            <div>
+              <div class="hero-motto">كُن الأَفْضَل</div>
+              <p id="heroGreeting" style="margin-top:6px; font-size:1rem; color:#F2F5FA;">
+                أهلاً بك يا البطل — استمر في بناء قوتك وانضباطك اليومي.
+              </p>
+            </div>
+            <div style="text-align:left;">
+              <div style="font-size:0.84rem; color:#F2F5FA;">البيانات الحالية للبطل</div>
+              <div id="heroStatsLine" style="font-weight:800; color:var(--peach);">—</div>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label">نسبة التقدم اليومي</div>
+              <div id="statProgress" class="stat-value">0%</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">الأيام المنقضية من الاشتراك</div>
+              <div id="statElapsedDays" class="stat-value">0 / 30 يوم</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">السعرات اليومية المقدرة</div>
+              <div id="statCalories" class="stat-value">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">نظام التدريب المختار</div>
+              <div id="statSplit" class="stat-value">PPL</div>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <div class="panel">
+              <div class="panel-header">
+                <h2 class="panel-title">تمارين اليوم</h2>
+                <span id="homeWorkoutDayTag" class="tag-maroon">اليوم 1</span>
+              </div>
+              <div id="homeWorkoutsList"></div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h2 class="panel-title">وجبات اليوم</h2>
+                <span id="homeMealCategoryTag" class="tag-maroon">فئة الطول</span>
+              </div>
+              <div id="homeMealsList"></div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h2 class="panel-title">أنشطة اليوم</h2>
+                <span id="homeActivityDayTag" class="tag-maroon">اليوم</span>
+              </div>
+              <div id="homeActivitiesList"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-workouts" class="hidden">
+          <div class="panel">
+            <div class="panel-header">
+              <h2 class="panel-title">جداول التمارين الأسبوعية — اختر نظامك</h2>
+              <span class="tag-maroon">6 أيام تدريب + راحة</span>
+            </div>
+            <p style="margin-bottom:14px; color:#DCE3F0; font-size:0.92rem;">
+              اختر بين نظام <strong>Push / Pull / Legs (PPL)</strong> أو نظام <strong>Arnold Split</strong>، وسيتم حفظ اختيارك وتحديث تمارين اليوم في الواجهة الرئيسية.
+            </p>
+            <div class="switcher-row">
+              <button id="choosePplBtn" class="btn-accent">نظام Push / Pull / Legs (PPL)</button>
+              <button id="chooseArnoldBtn" class="nav-btn">نظام Arnold Split</button>
+            </div>
+            <div id="workoutDayPills" class="day-pills"></div>
+            <div id="workoutScheduleTable"></div>
+          </div>
+        </section>
+
+        <section id="page-nutrition" class="hidden">
+          <div class="panel">
+            <div class="panel-header">
+              <h2 class="panel-title">نظامك الغذائي المخصص حسب الطول والوزن والهدف</h2>
+              <span id="nutritionBadge" class="tag-maroon">—</span>
+            </div>
+            <div id="nutritionSummaryBox" class="item-row" style="margin-bottom:16px;"></div>
+            <div id="nutritionMealsList"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h3 class="panel-title">جدول تقدير السعرات الحرارية اليومية (احتياج الثبات)</h3>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>مستوى النشاط البدني</th>
+                  <th>فئة 150–160 سم (رجال)</th>
+                  <th>فئة 160–180 سم (رجال)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>خامل (عمل مكتبي، بدون رياضة)</td>
+                  <td>1,650 – 1,900 سعرة</td>
+                  <td>1,900 – 2,250 سعرة</td>
+                </tr>
+                <tr>
+                  <td>نشاط خفيف (1–3 أيام أسبوعياً)</td>
+                  <td>1,900 – 2,150 سعرة</td>
+                  <td>2,150 – 2,550 سعرة</td>
+                </tr>
+                <tr>
+                  <td>نشاط متوسط (3–5 أيام أسبوعياً)</td>
+                  <td>2,150 – 2,450 سعرة</td>
+                  <td>2,450 – 2,900 سعرة</td>
+                </tr>
+                <tr>
+                  <td>نشاط عالٍ (6–7 أيام أسبوعياً)</td>
+                  <td>2,400 – 2,750 سعرة</td>
+                  <td>2,800 – 3,300 سعرة</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="page-activities" class="hidden">
+          <div class="panel">
+            <div class="panel-header">
+              <h2 class="panel-title">الجدول الأسبوعي للأنشطة الصحية اليومية</h2>
+              <span class="tag-maroon">السبت – الجمعة</span>
+            </div>
+            <div id="activityDayPills" class="day-pills"></div>
+            <div id="activityDayDetails"></div>
+          </div>
+        </section>
+
+        <!-- خانة المساعدة والدعم بعد فتح الموقع وقبول الاشتراك -->
+        <aside id="supportSection" class="support-box">
+          <div>
+            <div style="font-weight:800; font-size:1.05rem; color:var(--peach);">المساعدة والدعم الفني للنظام</div>
+            <div style="font-size:0.9rem; color:#F5F7FB; margin-top:4px;">
+              إذا أردت مساعدة أو استفساراً عن تفصيل أو أبلغت عن مشكلة في النظام، تواصل مباشرة على الرقم:
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <span id="supportPhoneText" style="background:var(--navy); padding:8px 14px; border-radius:10px; font-weight:800; font-size:1.1rem; color:var(--peach);">01273568689</span>
+            <button type="button" id="copySupportBtn" class="btn-accent">نسخ الرقم</button>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <!-- نافذة تعديل البيانات -->
+  <div id="profileModal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="panel-header">
+        <h3 class="panel-title">تحديث بيانات البطل</h3>
+        <button id="closeProfileModal" class="btn-ghost">إغلاق</button>
+      </div>
+      <form id="profileForm">
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="editHeight">الطول (سم)</label>
+            <input type="number" id="editHeight" class="input-control" style="background:#FFFFFF;" min="130" max="220" required />
+          </div>
+          <div class="form-group">
+            <label for="editWeight">الوزن (كجم)</label>
+            <input type="number" id="editWeight" class="input-control" style="background:#FFFFFF;" min="35" max="250" step="0.5" required />
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="editGoal">الهدف</label>
+            <select id="editGoal" class="input-control" style="background:#FFFFFF;">
+              <option value="maintain">ثبات الوزن</option>
+              <option value="loss">خسارة الوزن والدهون</option>
+              <option value="gain">زيادة الوزن وبناء العضلات</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editActivity">مستوى النشاط</label>
+            <select id="editActivity" class="input-control" style="background:#FFFFFF;">
+              <option value="moderate">متوسط (3-5 أيام)</option>
+              <option value="light">خفيف (1-3 أيام)</option>
+              <option value="high">عالٍ (6-7 أيام)</option>
+              <option value="sedentary">خامل</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn-accent" style="width:100%;">حفظ التعديلات</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة لوحة الإدارة وإعداد السحابة -->
+  <div id="adminModal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="panel-header">
+        <h3 class="panel-title">لوحة الإدارة والربط السحابي (شهر = 30 يوم | السعر: 250)</h3>
+        <button id="closeAdminModal" class="btn-ghost">إغلاق</button>
+      </div>
+
+      <div class="panel" style="background:var(--navy); margin-bottom:16px;">
+        <div class="item-title" style="color:var(--peach); margin-bottom:6px;">إعداد Firebase السحابي (اختياري لمزامنة جميع الأجهزة)</div>
+        <div class="item-sub" style="margin-bottom:8px;">
+          الصق كائن إعداد Firebase أو JSON هنا (<code>apiKey</code>، <code>projectId</code>، إلخ) ثم اضغط حفظ لتفعيل المزامنة السحابية الفورية عبر REST Firestore.
+        </div>
+        <textarea id="firebaseConfigInput" rows="4" class="input-control" style="background:#FFFFFF; margin-bottom:8px;" placeholder='{"apiKey":"...","projectId":"..."}'></textarea>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" id="saveCloudConfigBtn" class="btn-accent">حفظ وتفعيل السحابة</button>
+          <button type="button" id="clearCloudConfigBtn" class="btn-ghost">العمل محلياً فقط</button>
+        </div>
+      </div>
+
+      <p style="font-size:0.88rem; color:#DCE3F0; margin-bottom:12px;">
+        راجع طلبات العملاء أو حسابات الأصدقاء، وعند الضغط على <strong>قبول وتفعيل شهر (250)</strong> يتم فتح الموقع وتفعيل اشتراك شهر واحد (30 يوماً).
+      </p>
+      <div id="adminUsersList"></div>
+    </div>
+  </div>
+
+  <script>
+    const WALLET_NUMBER = "01273568689";
+    const SUBSCRIPTION_PRICE = 250;
+    const SUBSCRIPTION_DAYS = 30;
+    const STORAGE_KEY = "man_maker_platform_v2";
+    const CLOUD_CFG_KEY = "man_maker_firebase_cfg_v1";
+
+    const MEAL_PLANS = {
+      short: {
+        label: "فئة 150–160 سم",
+        maintain: {
+          title: "نظام الثبات لفئة 150–160 سم (متوسط 1,600–1,800 سعرة)",
+          meals: [
+            { name: "الإفطار", desc: "2 بيضة مسلوقة أو أومليت + 4 ملاعق فول مدمس بملعقة زيت زيتون أو زيت حار + نصف رغيف بلدي + خيار وطماطم.", role: "بروتين مشبع + ألياف لثبات السكر" },
+            { name: "سناك 1", desc: "ثمرة فاكهة موسمية (موزة متوسطة أو تفاحة أو برتقالة) + كوب شاي أو قهوة بدون سكر.", role: "طاقة سريعة وفيتامينات" },
+            { name: "الغداء", desc: "120–150 جم صدر أو ورك دجاج مخلي مشوي أو مسلوق أو علبة تونة مصفاة + 6 ملاعق أرز أو مكرونة + طبق خضار مطبوخ + طبق سلطة خضراء.", role: "بروتين لبناء العضلات + كربوهيدرات معقدة" },
+            { name: "سناك 2", desc: "كوب زبادي طبيعي (100–150 جم) أو حفنة صغيرة من الفول السوداني المحمص (حوالي 20 جم).", role: "دهون صحية وبروتين خفيف" },
+            { name: "العشاء", desc: "100 جم جبن قريش أو جبن أبيض قليل الدسم بملعقة زيت زيتون ورشة زعتر + نصف رغيف بلدي + شرائح فلفل وخيار.", role: "بروتين بطيء الامتصاص قبل النوم" }
+          ]
+        },
+        loss: {
+          title: "نظام خسارة الوزن لفئة 150–160 سم (متوسط 1,250–1,450 سعرة)",
+          meals: [
+            { name: "الإفطار", desc: "2 بيضة مسلوقة + 3 ملاعق فول مدمس بـ نصف ملعقة زيت زيتون أو زيت حار فقط + ربع إلى ثلث رغيف بلدي + طبق خيار وطماطم وجرجير كبير.", role: "البروتين والألياف تبطئ الهضم وتمنع الجوع" },
+            { name: "سناك 1", desc: "ثمرة فاكهة واحدة (تفاحة أو برتقالة أو جوافة) + شاي أو قهوة بدون سكر.", role: "سعرات معتدلة مع ألياف مشبعة" },
+            { name: "الغداء", desc: "150 جم صدر دجاج مشوي أو مسلوق أو سمك بلطي مشوي / تونة مصفاة بالماء + 4 ملاعق أرز أو مكرونة أو حبة بطاطس متوسطة + طبق خضار مطبوخ + طبق سلطة كبير.", role: "امتلاء عالٍ مع تقليل النشويات والدهون المضافة" },
+            { name: "سناك 2", desc: "كوب زبادي طبيعي (100–150 جم) أو ثمرة خيار / جزر مقرمشة.", role: "سعرات قليلة جداً لكبح الجوع المسائي" },
+            { name: "العشاء", desc: "100 جم جبن قريش مع رشة كمون أو زعتر وطماطم وخيار + ربع رغيف بلدي أو بدون خبز عند الشبع.", role: "عشاء خفيف غني بالبروتين البطيء" }
+          ]
+        },
+        gain: {
+          title: "نظام بناء العضلات لفئة 150–160 سم (متوسط 1,950–2,200 سعرة)",
+          meals: [
+            { name: "الإفطار", desc: "3 بيضات أومليت أو مسلوقة + 5 ملاعق فول مدمس بملعقة زيت زيتون أو زيت حار + رغيف بلدي كامل + خضار طازج.", role: "جرعة قوية من البروتين والطاقة في بداية اليوم" },
+            { name: "سناك 1", desc: "ثمرة موز متوسطة + 25–30 جم فول سوداني محمص غير مملح + كوب حليب أو زبادي.", role: "سعرات نظيفة وبروتين إضافي لتعزيز الفائض" },
+            { name: "الغداء", desc: "180 جم صدر أو ورك دجاج مشوي/مطبوخ أو سمك بلطي مشوي أو كفتة عدس مع بيض + 9 إلى 10 ملاعق أرز أو مكرونة أو بطاطس كبيرة مشوية + خضار مطبوخ + سلطة.", role: "بروتين عالي الجودة + نشويات لتجديد الجليكوجين" },
+            { name: "سناك 2", desc: "نصف كوب شوفان مطبوخ مع كوب حليب + ملعقة صغيرة عسل أو ثمرة فاكهة أو بطاطا حلوة متوسطة + بيضتان مسلوقتان.", role: "دعم الاستشفاء العضلي والطاقة حول التمرين" },
+            { name: "العشاء", desc: "150 جم جبن قريش + 2 بيضة مسلوقة أو 4 ملاعق فول + نصف إلى رغيف بلدي + خيار وطماطم.", role: "بروتين بطيء الامتصاص لدعم الاستشفاء أثناء النوم" }
+          ]
+        }
+      },
+      tall: {
+        label: "فئة 160–180 سم",
+        maintain: {
+          title: "نظام الثبات لفئة 160–180 سم (متوسط 2,100–2,400 سعرة)",
+          meals: [
+            { name: "الإفطار", desc: "3 بيضات + 6 ملاعق فول مدمس + رغيف بلدي كامل + طبق سلطة أو خضار ورقي.", role: "وجبة عالية البروتين والطاقة لبداية اليوم" },
+            { name: "سناك 1", desc: "2 ثمرة فاكهة موسمية + حفنة فول سوداني أو لوز (حوالي 30 جم).", role: "دهون صحية وألياف" },
+            { name: "الغداء", desc: "180–200 جم دجاج أو سمك بلطي مشوي / كفتة عدس مع بيض + 9 إلى 12 ملعقة أرز أو مكرونة أو حبة بطاطس كبيرة مشوية + خضار مطبوخ + سلطة.", role: "تغطية كاملة لاحتياج البروتين والنشويات" },
+            { name: "سناك 2", desc: "كوب شوفان بالحليب (نصف كوب شوفان + كوب حليب + رشة قرفة) أو بطاطا حلوة متوسطة مشوية.", role: "طاقة مستدامة ومناسبة قبل التمرين" },
+            { name: "العشاء", desc: "150 جم جبن قريش + 2 بيضة مسلوقة أو 4 ملاعق فول + نصف إلى رغيف بلدي + خيار وطماطم.", role: "يمنع الهدم العضلي ليلاً ويشبع لفترة طويلة" }
+          ]
+        },
+        loss: {
+          title: "نظام خسارة الوزن لفئة 160–180 سم (متوسط 1,650–1,900 سعرة)",
+          meals: [
+            { name: "الإفطار", desc: "3 بيضات (2 كاملة + بياض بيضة إضافي إن أمكن) + 4 ملاعق فول مدمس بملعقة صغيرة زيت + نصف رغيف بلدي + خضار ورقي وسلطة.", role: "بداية مشبعة جداً تحافظ على الكتلة العضلية" },
+            { name: "سناك 1", desc: "ثمرة فاكهة + 15 إلى 20 جم فول سوداني محمص غير مملح (حوالي 15–20 حبة).", role: "كمية مضبوطة من الدهون الصحية" },
+            { name: "الغداء", desc: "180–200 جم دجاج مشوي أو سمك أو عدس مطبوخ + 6 إلى 8 ملاعق أرز أو مكرونة أو بطاطس متوسطة إلى كبيرة مشوية + طبق خضار مطبوخ + طبق سلطة خضراء كبير.", role: "توازن مثالي بين البروتين العالي والنشويات المعتدلة" },
+            { name: "سناك 2", desc: "كوب زبادي أو نصف كوب شوفان مطبوخ بالماء / نصف كوب حليب بدون سكر.", role: "خيار مرن يقلل الرغبة في الحلويات" },
+            { name: "العشاء", desc: "150 جم جبن قريش أو بيضتان مسلوقتان + ربع إلى نصف رغيف بلدي + طبق خضار طازج.", role: "يشبع دون رفع السعرات المتبقية في نهاية اليوم" }
+          ]
+        },
+        gain: {
+          title: "نظام بناء العضلات لفئة 160–180 سم (متوسط 2,500–2,900 سعرة)",
+          meals: [
+            { name: "الإفطار", desc: "4 بيضات (3 كاملة + بياض بيضة إن أمكن) + 6 ملاعق فول مدمس بملعقة زيت زيتون/حار + رغيف إلى رغيف ونصف بلدي + طبق سلطة أو خضار.", role: "تغطية عالية للبروتين الصباحي والسعرات اللازمة للنمو" },
+            { name: "سناك 1", desc: "ثمرة موز أو تفاحة + 30–35 جم فول سوداني أو لوز + كوب حليب أو زبادي (150–200 جم).", role: "رفع السعرات والدهون الصحية بسهولة دون ثقل مفرط" },
+            { name: "الغداء", desc: "200–220 جم دجاج أو سمك أو لحم مفروم قليل الدهن / عدس مع بيض + 12 إلى 14 ملعقة أرز أو مكرونة أو حبتا بطاطس متوسطتان + خضار مطبوخ + سلطة.", role: "كمية وافرة من البروتين والنشويات لدعم الكتلة العضلية" },
+            { name: "سناك 2", desc: "كوب شوفان (حوالي 60–70 جم) بالحليب + بطاطا حلوة متوسطة أو بيضتان مسلوقتان.", role: "شحن مخازن الطاقة وبناء العضلات" },
+            { name: "العشاء", desc: "150–200 جم جبن قريش + 2 إلى 3 بيضات مسلوقة أو طبق فول صغير + رغيف بلدي + خضار طازج.", role: "يمنع الهدم الليلي ويزيد إجمالي البروتين اليومي" }
+          ]
+        }
+      }
+    };
+
+    const WORKOUT_SPLITS = {
+      ppl: {
+        name: "Push / Pull / Legs (PPL)",
+        days: [
+          { day: "اليوم 1", focus: "Push A — صدر، أكتاف، ترايسبس", exercises: [
+            { title: "بنش بريس مستو (بار أو دمبل)", sets: "3–4 × 6–10" },
+            { title: "ضغط كتف أمامي (بار أو دمبل جالس)", sets: "3 × 8–12" },
+            { title: "تفتيح صدر بالدمبل أو الكابل", sets: "3 × 10–15" },
+            { title: "رفرفة جانبي للكتف", sets: "3–4 × 12–15" },
+            { title: "ترايسبس بالكيبل أو Overhead", sets: "3 × 10–15" }
+          ]},
+          { day: "اليوم 2", focus: "Pull A — ظهر، بايسبس، خلفي كتف", exercises: [
+            { title: "سحب علوي واسع أو عقلة", sets: "3–4 × 8–12" },
+            { title: "سحب أرضي أو بار مائل", sets: "3–4 × 8–12" },
+            { title: "سحب ضيق أو دمبل فردي", sets: "3 × 10–12" },
+            { title: "رفرفة خلفي للكتف", sets: "3 × 12–15" },
+            { title: "تبادل بايسبس بالدمبل أو بار", sets: "3 × 10–12" }
+          ]},
+          { day: "اليوم 3", focus: "Legs A — أماميات، خلفيات، سمانة، بطن", exercises: [
+            { title: "سكوات (بار أو سميث أو هاك)", sets: "3–4 × 6–10" },
+            { title: "رجل أمامي (Leg Extension)", sets: "3 × 10–15" },
+            { title: "رجل خلفي (Leg Curl)", sets: "3 × 10–15" },
+            { title: "سمانة واقف أو جالس", sets: "4 × 12–20" },
+            { title: "تمرين بطن", sets: "3 × 12–20" }
+          ]},
+          { day: "اليوم 4", focus: "Push B — تركيز علوي للصدر والكتف والتراي", exercises: [
+            { title: "بنش بريس مائل", sets: "3–4 × 8–12" },
+            { title: "رفرفة جانبي بالكيبل أو دمبل", sets: "4 × 12–15" },
+            { title: "ضغط صدر جهاز أو دمبل مستو", sets: "3 × 10–12" },
+            { title: "ترايسبس فرنسي أو كيبل", sets: "3 × 10–15" }
+          ]},
+          { day: "اليوم 5", focus: "Pull B — سمك الظهر والبايسبس والساعد", exercises: [
+            { title: "ديد ليفت روماني أو سحب علوي", sets: "3 × 8–10" },
+            { title: "سحب بار أو تي بار", sets: "3–4 × 8–12" },
+            { title: "بايسبس هامر", sets: "3 × 10–12" },
+            { title: "بايسبس كابل أو بار", sets: "3 × 10–15" }
+          ]},
+          { day: "اليوم 6", focus: "Legs B — تركيز خلفيات وأرداف وأماميات وسمانة", exercises: [
+            { title: "ليج بريس أو طعنات", sets: "3–4 × 8–12" },
+            { title: "ديد ليفت روماني أو خلفي رجل", sets: "3–4 × 10–12" },
+            { title: "سمانة جالس أو واقف", sets: "4 × 12–20" },
+            { title: "بلانك أو بطن", sets: "3 × 30–60 ثانية" }
+          ]},
+          { day: "اليوم 7", focus: "راحة تامة", exercises: [
+            { title: "استشفاء عضلي، نوم جيد، وتثبيت التغذية", sets: "راحة كاملة" }
+          ]}
+        ]
+      },
+      arnold: {
+        name: "Arnold Split (تقسيم أرنولد)",
+        days: [
+          { day: "اليوم 1", focus: "صدر + ظهر", exercises: [
+            { title: "بنش بريس مستو أو مائل", sets: "3–4 × 8–12" },
+            { title: "سحب علوي واسع أو عقلة", sets: "3–4 × 8–12" },
+            { title: "تفتيح صدر بالدمبل أو الكابل", sets: "3 × 10–15" },
+            { title: "سحب بار أو دمبل مائل", sets: "3–4 × 8–12" }
+          ]},
+          { day: "اليوم 2", focus: "أكتاف + ذراعين", exercises: [
+            { title: "ضغط كتف دمبل أو بار", sets: "3–4 × 8–12" },
+            { title: "رفرفة جانبي للكتف", sets: "4 × 12–15" },
+            { title: "بار بايسبس", sets: "3 × 8–12" },
+            { title: "ترايسبس كيبل أو ضغط ضيق", sets: "3 × 10–12" }
+          ]},
+          { day: "اليوم 3", focus: "أرجل + سمانة + بطن", exercises: [
+            { title: "سكوات أساسي", sets: "3–4 × 6–10" },
+            { title: "ليج بريس أو طعنات", sets: "3 × 10–12" },
+            { title: "رجل خلفي وأمامي", sets: "3–4 × 10–15" },
+            { title: "سمانة وبطن", sets: "4 × 12–20" }
+          ]},
+          { day: "اليوم 4", focus: "صدر + ظهر (تركيز مختلف)", exercises: [
+            { title: "بنش مائل دمبل أو بار", sets: "3–4 × 8–12" },
+            { title: "سحب أرضي أو تي بار", sets: "3–4 × 8–12" },
+            { title: "غطس أو تفتيح صدر", sets: "3 × 10–15" }
+          ]},
+          { day: "اليوم 5", focus: "أكتاف + ذراعين (تركيز مختلف)", exercises: [
+            { title: "ضغط أرنولد أو كتف جانبي", sets: "3 × 8–12" },
+            { title: "بايسبس مائل أو كابل", sets: "3 × 10–12" },
+            { title: "ترايسبس كيبل أو فرنسي", sets: "3 × 10–15" }
+          ]},
+          { day: "اليوم 6", focus: "أرجل + سمانة + بطن (تركيز مختلف)", exercises: [
+            { title: "ديد ليفت روماني أو خلفي", sets: "3–4 × 8–12" },
+            { title: "سكوات أو هاك سكوات", sets: "3 × 8–12" },
+            { title: "سمانة وبطن", sets: "4 × 12–20" }
+          ]},
+          { day: "اليوم 7", focus: "راحة تامة", exercises: [
+            { title: "استشفاء شامل للجهاز العصبي والعضلي", sets: "راحة كاملة" }
+          ]}
+        ]
+      }
+    };
+
+    const WEEKLY_ACTIVITIES = [
+      { day: "السبت", physical: "المشي السريع لمدة 30 دقيقة في الهواء الطلق.", nutrition: "شرب 2.5 لتر من الماء وتناول وجبة إفطار غنية بالبروتين.", mental: "قراءة 15 صفحة من كتاب أو الاستماع لمحتوى ملهم بعيداً عن الشاشات." },
+      { day: "الأحد", physical: "تمارين مقاومة بوزن الجسم لمدة 25 دقيقة.", nutrition: "إدخال طبق سلطة خضراء كبير في وجبتي الغداء والعشاء.", mental: "ممارسة تمارين التنفس العميق لمدة 5 دقائق لتقليل التوتر." },
+      { day: "الاثنين", physical: "تمرين كارديو متوسط الشدة لمدة 30 دقيقة.", nutrition: "استبدال السكريات المصنعة بفاكهة طازجة وحفنة من المكسرات.", mental: "إغلاق الهاتف تماماً قبل موعد النوم بـ 45 دقيقة." },
+      { day: "الثلاثاء", physical: "تمارين إطالة ومرونة لكامل الجسم لمدة 20 دقيقة.", nutrition: "التركيز على الدهون الصحية (زيت زيتون، أفوكادو، أو أسماك).", mental: "تدوين 3 أشياء تشعر بالامتنان تجاهها خلال يومك." },
+      { day: "الأربعاء", physical: "تمارين الجزء العلوي والكور لمدة 30 دقيقة.", nutrition: "تقليل الكافيين بعد الساعة 2 ظهراً لتحسين جودة النوم.", mental: "الجلوس في الشمس الصباحية لمدة 15 دقيقة لتعزيز فيتامين د." },
+      { day: "الخميس", physical: "المشي لمسافة أطول أو صعود الدرج لمدة 35 دقيقة.", nutrition: "تحضير وجبة صحية في المنزل وتجنب الوجبات السريعة.", mental: "التواصل مع صديق أو فرد من العائلة في محادثة هادئة." },
+      { day: "الجمعة", physical: "راحة نشطة (مشي خفيف جداً) لمدة 20 دقيقة.", nutrition: "يوم مرن باعتدال مع الحفاظ على شرب الماء بكثرة.", mental: "النوم لمدة 7–8 ساعات متواصلة وتجهيز خطة الأسبوع القادم." }
+    ];
+
+    function loadState() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        try { return JSON.parse(raw); } catch (e) {}
+      }
+      return { currentUserEmail: null, users: {} };
+    }
+
+    let state = loadState();
+    let cloudConfig = loadCloudConfig();
+    let welcomeTimer = null;
+    let activeWorkoutDayIdx = 0;
+    let activeActivityDayIdx = new Date().getDay() === 6 ? 0 : (new Date().getDay() + 1) % 7;
+
+    function loadCloudConfig() {
+      const raw = localStorage.getItem(CLOUD_CFG_KEY);
+      if (!raw) return null;
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.projectId) return parsed;
+      } catch (e) {}
+      return null;
+    }
+
+    function saveState(syncCloud = true) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      if (syncCloud && cloudConfig) {
+        pushUserToCloud(getCurrentUser());
+      }
+    }
+
+    function getCurrentUser() {
+      if (!state.currentUserEmail) return null;
+      return state.users[state.currentUserEmail] || null;
+    }
+
+    function docIdFromEmail(email) {
+      return encodeURIComponent(String(email || "").trim().toLowerCase());
+    }
+
+    async function pushUserToCloud(user) {
+      if (!cloudConfig || !user || !user.email) return;
+      try {
+        const docId = docIdFromEmail(user.email);
+        const url = `https://firestore.googleapis.com/v1/projects/${encodeURIComponent(cloudConfig.projectId)}/databases/(default)/documents/man_maker_users/${docId}`;
+        const body = {
+          fields: {
+            payloadJson: { stringValue: JSON.stringify(user) },
+            updatedAt: { stringValue: new Date().toISOString() }
+          }
+        };
+        await fetch(url, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+      } catch (e) {
+        // Fallback silently to localStorage if offline or rules restrict
+      }
+    }
+
+    async function pullUsersFromCloud() {
+      if (!cloudConfig || !cloudConfig.projectId) return;
+      try {
+        const url = `https://firestore.googleapis.com/v1/projects/${encodeURIComponent(cloudConfig.projectId)}/databases/(default)/documents/man_maker_users`;
+        const res = await fetch(url);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (Array.isArray(data.documents)) {
+          data.documents.forEach(doc => {
+            const rawJson = doc.fields && doc.fields.payloadJson && doc.fields.payloadJson.stringValue;
+            if (rawJson) {
+              const u = JSON.parse(rawJson);
+              if (u && u.email) {
+                state.users[u.email] = u;
+              }
+            }
+          });
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          renderApp(false);
+        }
+      } catch (e) {}
+    }
+
+    function getHeightCategoryKey(heightCm) {
+      return Number(heightCm) <= 160 ? "short" : "tall";
+    }
+
+    function estimateCalories(user) {
+      const h = Number(user.height) || 170;
+      const w = Number(user.weight) || 70;
+      const isShort = h <= 160;
+      const baseMap = {
+        sedentary: isShort ? 1775 : 2075,
+        light: isShort ? 2025 : 2350,
+        moderate: isShort ? 2300 : 2675,
+        high: isShort ? 2575 : 3050
+      };
+      let cals = baseMap[user.activity] || 2350;
+      const weightDiff = isShort ? (w - 54) * 6 : (w - 68) * 6;
+      cals = Math.round(cals + Math.max(-150, Math.min(150, weightDiff)));
+      if (user.goal === "loss") cals = Math.max(1500, cals - 400);
+      if (user.goal === "gain") cals = cals + 400;
+      return cals;
+    }
+
+    function getSubscriptionInfo(user) {
+      if (!user.subscription || user.subscription.status !== "approved" || !user.subscription.startDate) {
+        return { active: false, elapsedDays: 0, remainingDays: 0 };
+      }
+      const start = new Date(user.subscription.startDate).getTime();
+      const now = Date.now();
+      const elapsedDays = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+      const remainingDays = Math.max(0, SUBSCRIPTION_DAYS - elapsedDays);
+      return {
+        active: elapsedDays < SUBSCRIPTION_DAYS,
+        elapsedDays: Math.min(SUBSCRIPTION_DAYS, Math.max(0, elapsedDays)),
+        remainingDays
+      };
+    }
+
+    function showAuthNotice(msg) {
+      const box = document.getElementById("authNotice");
+      box.textContent = msg;
+      box.classList.remove("hidden");
+    }
+
+    function triggerWelcomeOverlay(user) {
+      const overlay = document.getElementById("welcomeOverlay");
+      const bar = overlay.querySelector(".welcome-bar-fill");
+      document.getElementById("welcomeHeroText").textContent = `أهلاً بك يا البطل ${user.name}`;
+      overlay.classList.remove("hidden");
+      bar.style.animation = "none";
+      void bar.offsetWidth;
+      bar.style.animation = "barFill 3.6s linear forwards";
+
+      if (welcomeTimer) clearTimeout(welcomeTimer);
+      welcomeTimer = setTimeout(() => {
+        overlay.classList.add("hidden");
+      }, 3600);
+    }
+
+    // تفاعل 3D مع حركة المؤشر في مشهد الترحيب
+    const welcomeStage = document.getElementById("welcomeStage");
+    document.getElementById("welcomeOverlay").addEventListener("mousemove", (e) => {
+      const rect = welcomeStage.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const rx = ((e.clientY - cy) / rect.height) * -14;
+      const ry = ((e.clientX - cx) / rect.width) * 14;
+      welcomeStage.style.transform = `rotateX(${rx.toFixed(1)}deg) rotateY(${ry.toFixed(1)}deg)`;
+    });
+
+    document.getElementById("welcomeOverlay").addEventListener("mouseleave", () => {
+      welcomeStage.style.transform = "rotateX(0deg) rotateY(0deg)";
+    });
+
+    document.getElementById("enterDashboardBtn").addEventListener("click", () => {
+      if (welcomeTimer) clearTimeout(welcomeTimer);
+      document.getElementById("welcomeOverlay").classList.add("hidden");
+    });
+
+    document.getElementById("replayWelcomeBtn").addEventListener("click", () => {
+      const user = getCurrentUser();
+      if (user && getSubscriptionInfo(user).active) {
+        triggerWelcomeOverlay(user);
+      }
+    });
+
+    document.querySelectorAll(".eye-toggle").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const input = document.getElementById(btn.dataset.target);
+        input.type = input.type === "password" ? "text" : "password";
+      });
+    });
+
+    document.getElementById("toSignupBtn").addEventListener("click", () => {
+      document.getElementById("loginForm").classList.add("hidden");
+      document.getElementById("signupForm").classList.remove("hidden");
+      document.getElementById("authSubtitle").textContent = "إنشاء حساب جديد في منصة صانع الرجال";
+      document.getElementById("authNotice").classList.add("hidden");
+    });
+
+    document.getElementById("toLoginBtn").addEventListener("click", () => {
+      document.getElementById("signupForm").classList.add("hidden");
+      document.getElementById("loginForm").classList.remove("hidden");
+      document.getElementById("authSubtitle").textContent = "سجّل دخولك لمتابعة خطتك اليومية";
+      document.getElementById("authNotice").classList.add("hidden");
+    });
+
+    document.getElementById("signupForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("signupName").value.trim();
+      const email = document.getElementById("signupEmail").value.trim().toLowerCase();
+      const password = document.getElementById("signupPassword").value;
+      const height = Number(document.getElementById("signupHeight").value);
+      const weight = Number(document.getElementById("signupWeight").value);
+      const goal = document.getElementById("signupGoal").value;
+      const activity = document.getElementById("signupActivity").value;
+
+      if (height < 130 || height > 220 || weight < 35 || weight > 250) {
+        showAuthNotice("يرجى إدخال طول صحيح بين 130 و220 سم ووزن بين 35 و250 كجم.");
+        return;
+      }
+
+      if (state.users[email]) {
+        showAuthNotice("هذا البريد الإلكتروني مسجل بالفعل، يمكنك تسجيل الدخول مباشرة.");
+        return;
+      }
+
+      state.users[email] = {
+        name,
+        email,
+        password,
+        height,
+        weight,
+        goal,
+        activity,
+        split: "ppl",
+        completedTasks: {},
+        welcomeShownForSub: null,
+        subscription: {
+          status: "unpaid",
+          txRef: "",
+          startDate: null
+        }
+      };
+      state.currentUserEmail = email;
+      saveState();
+      renderApp();
+    });
+
+    document.getElementById("loginForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+      const password = document.getElementById("loginPassword").value;
+      const user = state.users[email];
+
+      if (!user || user.password !== password) {
+        showAuthNotice("البريد الإلكتروني أو كلمة المرور غير صحيحة.");
+        return;
+      }
+
+      state.currentUserEmail = email;
+      saveState(false);
+      renderApp();
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      document.getElementById("welcomeOverlay").classList.add("hidden");
+      state.currentUserEmail = null;
+      saveState(false);
+      renderApp();
+    });
+
+    document.getElementById("copyWalletBtn").addEventListener("click", () => {
+      navigator.clipboard?.writeText(WALLET_NUMBER);
+      document.getElementById("copyWalletBtn").textContent = "تم النسخ ✓";
+      setTimeout(() => { document.getElementById("copyWalletBtn").textContent = "نسخ الرقم"; }, 1500);
+    });
+
+    document.getElementById("copySupportBtn").addEventListener("click", () => {
+      navigator.clipboard?.writeText(WALLET_NUMBER);
+      document.getElementById("copySupportBtn").textContent = "تم النسخ ✓";
+      setTimeout(() => { document.getElementById("copySupportBtn").textContent = "نسخ الرقم"; }, 1500);
+    });
+
+    document.getElementById("paymentRequestForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const user = getCurrentUser();
+      if (!user) return;
+      const txRef = document.getElementById("txRefInput").value.trim();
+      user.subscription.status = "pending";
+      user.subscription.txRef = txRef;
+      saveState();
+      renderApp();
+    });
+
+    // لوحة الإدارة والسحابة
+    document.getElementById("openAdminBtn").addEventListener("click", async () => {
+      if (cloudConfig) await pullUsersFromCloud();
+      document.getElementById("firebaseConfigInput").value = cloudConfig ? JSON.stringify(cloudConfig, null, 2) : "";
+      renderAdminModal();
+      document.getElementById("adminModal").classList.remove("hidden");
+    });
+
+    document.getElementById("closeAdminModal").addEventListener("click", () => {
+      document.getElementById("adminModal").classList.add("hidden");
+    });
+
+    document.getElementById("saveCloudConfigBtn").addEventListener("click", async () => {
+      const rawText = document.getElementById("firebaseConfigInput").value.trim();
+      if (!rawText) return;
+      try {
+        // يدعم لصق كائن JS مثل { apiKey: "..." } أو JSON صالح
+        const normalized = rawText
+          .replace(/(\w+)\s*:/g, '"$1":')
+          .replace(/'/g, '"');
+        const parsed = JSON.parse(normalized);
+        if (!parsed.projectId) {
+          alert("يرجى التأكد من وجود projectId في إعدادات Firebase.");
+          return;
+        }
+        cloudConfig = parsed;
+        localStorage.setItem(CLOUD_CFG_KEY, JSON.stringify(cloudConfig));
+        await pullUsersFromCloud();
+        const curr = getCurrentUser();
+        if (curr) await pushUserToCloud(curr);
+        renderApp(false);
+        alert("تم حفظ إعداد السحابة وتفعيل المزامنة.");
+      } catch (err) {
+        alert("صيغة الإعداد غير صحيحة. يرجى التأكد من الصيغة.");
+      }
+    });
+
+    document.getElementById("clearCloudConfigBtn").addEventListener("click", () => {
+      cloudConfig = null;
+      localStorage.removeItem(CLOUD_CFG_KEY);
+      document.getElementById("firebaseConfigInput").value = "";
+      renderApp(false);
+    });
+
+    function renderAdminModal() {
+      const container = document.getElementById("adminUsersList");
+      const emails = Object.keys(state.users);
+      if (emails.length === 0) {
+        container.innerHTML = `<p style="color:#CBD4E6;">لا توجد حسابات مسجلة حتى الآن.</p>`;
+        return;
+      }
+
+      container.innerHTML = emails.map(email => {
+        const u = state.users[email];
+        const subInfo = getSubscriptionInfo(u);
+        const statusLabel = subInfo.active
+          ? `مفعل (متبقي ${subInfo.remainingDays} يوم)`
+          : (u.subscription.status === "pending" ? "بانتظار القبول" : "غير مفعل / منتهي");
+
+        return `
+          <div class="item-row">
+            <div>
+              <div class="item-title">${u.name} — <span style="color:var(--peach);">${u.email}</span></div>
+              <div class="item-sub">الطول: ${u.height} سم | الوزن: ${u.weight} كجم | الحالة: <strong>${statusLabel}</strong></div>
+              ${u.subscription.txRef ? `<div class="item-sub">بيانات التحويل: ${u.subscription.txRef}</div>` : ""}
+            </div>
+            <button type="button" class="btn-accent" onclick="approveSubscription('${email}')">قبول وتفعيل شهر (250)</button>
+          </div>
+        `;
+      }).join("");
+    }
+
+    window.approveSubscription = function(email) {
+      const u = state.users[email];
+      if (!u) return;
+      const startIso = new Date().toISOString();
+      u.subscription = {
+        status: "approved",
+        txRef: u.subscription.txRef || "تم القبول المباشر",
+        startDate: startIso
+      };
+      u.welcomeShownForSub = null;
+      saveState();
+      renderAdminModal();
+      renderApp();
+    };
+
+    document.getElementById("editProfileBtn").addEventListener("click", () => {
+      const user = getCurrentUser();
+      if (!user) return;
+      document.getElementById("editHeight").value = user.height;
+      document.getElementById("editWeight").value = user.weight;
+      document.getElementById("editGoal").value = user.goal;
+      document.getElementById("editActivity").value = user.activity;
+      document.getElementById("profileModal").classList.remove("hidden");
+    });
+
+    document.getElementById("closeProfileModal").addEventListener("click", () => {
+      document.getElementById("profileModal").classList.add("hidden");
+    });
+
+    document.getElementById("profileForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const user = getCurrentUser();
+      if (!user) return;
+      const h = Number(document.getElementById("editHeight").value);
+      const w = Number(document.getElementById("editWeight").value);
+      if (h < 130 || h > 220 || w < 35 || w > 250) return;
+
+      user.height = h;
+      user.weight = w;
+      user.goal = document.getElementById("editGoal").value;
+      user.activity = document.getElementById("editActivity").value;
+      saveState();
+      document.getElementById("profileModal").classList.add("hidden");
+      renderApp();
+    });
+
+    function switchPage(pageName) {
+      ["home", "workouts", "nutrition", "activities"].forEach(p => {
+        document.getElementById(`page-${p}`).classList.toggle("hidden", p !== pageName);
+      });
+      document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.page === pageName);
+      });
+    }
+
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+      btn.addEventListener("click", () => switchPage(btn.dataset.page));
+    });
+    document.getElementById("brandHomeBtn").addEventListener("click", () => switchPage("home"));
+
+    document.getElementById("choosePplBtn").addEventListener("click", () => {
+      const user = getCurrentUser();
+      if (!user) return;
+      user.split = "ppl";
+      activeWorkoutDayIdx = 0;
+      saveState();
+      renderApp();
+    });
+
+    document.getElementById("chooseArnoldBtn").addEventListener("click", () => {
+      const user = getCurrentUser();
+      if (!user) return;
+      user.split = "arnold";
+      activeWorkoutDayIdx = 0;
+      saveState();
+      renderApp();
+    });
+
+    window.toggleTask = function(taskId) {
+      const user = getCurrentUser();
+      if (!user) return;
+      user.completedTasks[taskId] = !user.completedTasks[taskId];
+      saveState();
+      renderApp();
+    };
+
+    window.selectWorkoutDay = function(idx) {
+      activeWorkoutDayIdx = idx;
+      renderApp(false);
+    };
+
+    window.selectActivityDay = function(idx) {
+      activeActivityDayIdx = idx;
+      renderApp(false);
+    };
+
+    function renderApp(allowWelcomeTrigger = true) {
+      const user = getCurrentUser();
+      document.getElementById("cloudStatusBadge").textContent = cloudConfig
+        ? `سحابة: ${cloudConfig.projectId}`
+        : "وضع محلي";
+
+      if (!user) {
+        document.body.classList.add("auth-mode");
+        document.getElementById("authSection").classList.remove("hidden");
+        document.getElementById("appShell").classList.add("hidden");
+        document.getElementById("welcomeOverlay").classList.add("hidden");
+        return;
+      }
+
+      document.body.classList.remove("auth-mode");
+      document.getElementById("authSection").classList.add("hidden");
+      document.getElementById("appShell").classList.remove("hidden");
+
+      const subInfo = getSubscriptionInfo(user);
+      const badge = document.getElementById("subRemainingBadge");
+
+      if (!subInfo.active) {
+        document.getElementById("welcomeOverlay").classList.add("hidden");
+        badge.textContent = "الاشتراك: غير مفعل";
+        document.getElementById("mainNav").classList.add("hidden");
+        document.getElementById("unlockedContent").classList.add("hidden");
+        document.getElementById("paywallSection").classList.remove("hidden");
+
+        const isExpired = user.subscription.status === "approved" && subInfo.remainingDays === 0;
+        document.getElementById("gateTitle").textContent = isExpired
+          ? "انتهت مدة الشهر — جدد اشتراكك (250)"
+          : "تفعيل الاشتراك الشهري — 250";
+        document.getElementById("gateDescription").innerHTML = isExpired
+          ? "لقد انتهت مدة اشتراكك الشهرية (30 يوماً) في منصة <strong>صانع الرجال</strong>. لتجديد الاشتراك لمدة شهر جديد، حوّل مبلغ <strong>250</strong> إلى المحفظة وأرسل تأكيد الدفع وانتظار القبول."
+          : "لفتح منصة <strong>صانع الرجال</strong> لمدة شهر واحد (30 يوماً)، قيمة الاشتراك <strong>250</strong>. حوّل المبلغ إلى المحفظة الإلكترونية وأرسل رقم العملية لانتظار القبول.";
+
+        document.getElementById("pendingStatusBox").classList.toggle("hidden", user.subscription.status !== "pending");
+        return;
+      }
+
+      // الاشتراك ساري المفعول: تشغيل الترحيب 3D مرة واحدة لكل دورة اشتراك
+      if (allowWelcomeTrigger && user.welcomeShownForSub !== user.subscription.startDate) {
+        user.welcomeShownForSub = user.subscription.startDate;
+        saveState();
+        triggerWelcomeOverlay(user);
+      }
+
+      badge.textContent = `متبقي ${subInfo.remainingDays} يوم من الشهر`;
+      document.getElementById("mainNav").classList.remove("hidden");
+      document.getElementById("paywallSection").classList.add("hidden");
+      document.getElementById("unlockedContent").classList.remove("hidden");
+
+      const goalLabels = {
+        maintain: "ثبات الوزن",
+        loss: "خسارة الوزن والدهون",
+        gain: "زيادة الوزن وبناء العضلات"
+      };
+      const catKey = getHeightCategoryKey(user.height);
+      const mealPlan = MEAL_PLANS[catKey][user.goal || "maintain"];
+      const calories = estimateCalories(user);
+      const splitData = WORKOUT_SPLITS[user.split || "ppl"];
+      const todayWorkout = splitData.days[activeWorkoutDayIdx] || splitData.days[0];
+      const todayActivity = WEEKLY_ACTIVITIES[activeActivityDayIdx] || WEEKLY_ACTIVITIES[0];
+
+      document.getElementById("heroGreeting").textContent =
+        `أهلاً بك يا البطل ${user.name} — هدفك الحالي: ${goalLabels[user.goal] || "ثبات الوزن"}.`;
+      document.getElementById("heroStatsLine").textContent =
+        `الطول: ${user.height} سم | الوزن: ${user.weight} كجم (${MEAL_PLANS[catKey].label})`;
+
+      document.getElementById("statElapsedDays").textContent = `${subInfo.elapsedDays} / 30 يوم`;
+      document.getElementById("statCalories").textContent = `${calories.toLocaleString("en-US")} سعرة`;
+      document.getElementById("statSplit").textContent = user.split === "arnold" ? "Arnold Split" : "PPL";
+
+      const workoutTaskIds = todayWorkout.exercises.map((_, idx) => `w_${user.split}_${activeWorkoutDayIdx}_${idx}`);
+      const mealTaskIds = mealPlan.meals.map((_, idx) => `m_${catKey}_${user.goal}_${idx}`);
+      const actTaskIds = [
+        `a_${activeActivityDayIdx}_phys`,
+        `a_${activeActivityDayIdx}_nutr`,
+        `a_${activeActivityDayIdx}_ment`
+      ];
+      const allTodayIds = [...workoutTaskIds, ...mealTaskIds, ...actTaskIds];
+      const doneCount = allTodayIds.filter(id => !!user.completedTasks[id]).length;
+      const progressPct = allTodayIds.length ? Math.round((doneCount / allTodayIds.length) * 100) : 0;
+      document.getElementById("statProgress").textContent = `${progressPct}%`;
+
+      document.getElementById("homeWorkoutDayTag").textContent = `${todayWorkout.day} (${splitData.name})`;
+      document.getElementById("homeWorkoutsList").innerHTML = todayWorkout.exercises.map((ex, idx) => {
+        const tid = workoutTaskIds[idx];
+        const done = !!user.completedTasks[tid];
+        return `
+          <div class="item-row">
+            <div>
+              <div class="item-title">${ex.title}</div>
+              <div class="item-sub">${ex.sets}</div>
+            </div>
+            <button type="button" class="check-btn ${done ? "done" : ""}" onclick="toggleTask('${tid}')">${done ? "تم ✓" : "إتمام"}</button>
+          </div>
+        `;
+      }).join("");
+
+      document.getElementById("homeMealCategoryTag").textContent = MEAL_PLANS[catKey].label;
+      document.getElementById("homeMealsList").innerHTML = mealPlan.meals.map((m, idx) => {
+        const tid = mealTaskIds[idx];
+        const done = !!user.completedTasks[tid];
+        return `
+          <div class="item-row">
+            <div>
+              <div class="item-title">${m.name}</div>
+              <div class="item-sub">${m.desc}</div>
+            </div>
+            <button type="button" class="check-btn ${done ? "done" : ""}" onclick="toggleTask('${tid}')">${done ? "تم ✓" : "إتمام"}</button>
+          </div>
+        `;
+      }).join("");
+
+      document.getElementById("homeActivityDayTag").textContent = todayActivity.day;
+      const actRows = [
+        { key: actTaskIds[0], label: "النشاط البدني", text: todayActivity.physical },
+        { key: actTaskIds[1], label: "العادة الصحية والتغذية", text: todayActivity.nutrition },
+        { key: actTaskIds[2], label: "الصحة الذهنية والاستشفاء", text: todayActivity.mental }
+      ];
+      document.getElementById("homeActivitiesList").innerHTML = actRows.map(r => {
+        const done = !!user.completedTasks[r.key];
+        return `
+          <div class="item-row">
+            <div>
+              <div class="item-title">${r.label}</div>
+              <div class="item-sub">${r.text}</div>
+            </div>
+            <button type="button" class="check-btn ${done ? "done" : ""}" onclick="toggleTask('${r.key}')">${done ? "تم ✓" : "إتمام"}</button>
+          </div>
+        `;
+      }).join("");
+
+      document.getElementById("choosePplBtn").className = user.split === "ppl" ? "btn-accent" : "nav-btn";
+      document.getElementById("chooseArnoldBtn").className = user.split === "arnold" ? "btn-accent" : "nav-btn";
+
+      document.getElementById("workoutDayPills").innerHTML = splitData.days.map((d, i) => `
+        <button type="button" class="day-pill ${i === activeWorkoutDayIdx ? "active" : ""}" onclick="selectWorkoutDay(${i})">${d.day}</button>
+      `).join("");
+
+      document.getElementById("workoutScheduleTable").innerHTML = `
+        <div style="margin-bottom:10px; font-weight:700; color:var(--peach);">${todayWorkout.day} — ${todayWorkout.focus}</div>
+        <table>
+          <thead>
+            <tr>
+              <th>التمرين</th>
+              <th>المجموعات × التكرارات</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${todayWorkout.exercises.map(ex => `
+              <tr>
+                <td>${ex.title}</td>
+                <td>${ex.sets}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+
+      document.getElementById("nutritionBadge").textContent = `${MEAL_PLANS[catKey].label} | ${goalLabels[user.goal]}`;
+      document.getElementById("nutritionSummaryBox").innerHTML = `
+        <div>
+          <div class="item-title">${mealPlan.title}</div>
+          <div class="item-sub">الاحتياج التقديري اليومي لك (طول ${user.height} سم، وزن ${user.weight} كجم): <strong>${calories.toLocaleString("en-US")} سعرة حرارية</strong>.</div>
+        </div>
+      `;
+      document.getElementById("nutritionMealsList").innerHTML = mealPlan.meals.map(m => `
+        <div class="item-row">
+          <div>
+            <div class="item-title">${m.name}</div>
+            <div class="item-sub">${m.desc}</div>
+            <div class="item-sub" style="color:var(--peach);">القيمة والدور: ${m.role}</div>
+          </div>
+        </div>
+      `).join("");
+
+      document.getElementById("activityDayPills").innerHTML = WEEKLY_ACTIVITIES.map((a, i) => `
+        <button type="button" class="day-pill ${i === activeActivityDayIdx ? "active" : ""}" onclick="selectActivityDay(${i})">${a.day}</button>
+      `).join("");
+
+      document.getElementById("activityDayDetails").innerHTML = `
+        <div class="item-row">
+          <div>
+            <div class="item-title">النشاط البدني (${todayActivity.day})</div>
+            <div class="item-sub">${todayActivity.physical}</div>
+          </div>
+        </div>
+        <div class="item-row">
+          <div>
+            <div class="item-title">العادة الصحية والتغذية (${todayActivity.day})</div>
+            <div class="item-sub">${todayActivity.nutrition}</div>
+          </div>
+        </div>
+        <div class="item-row">
+          <div>
+            <div class="item-title">الصحة الذهنية والاستشفاء (${todayActivity.day})</div>
+            <div class="item-sub">${todayActivity.mental}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // مزامنة تلقائية دورية عند تفعيل السحابة
+    setInterval(() => {
+      if (cloudConfig && document.getElementById("appShell") && !document.getElementById("appShell").classList.contains("hidden")) {
+        pullUsersFromCloud();
+      }
+    }, 15000);
+
+    if (cloudConfig) {
+      pullUsersFromCloud();
+    }
+    renderApp();
+  </script>
+</body>
+</html>
